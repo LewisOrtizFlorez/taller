@@ -1,0 +1,65 @@
+version: '3.7'
+services:
+    app:
+        build:
+            args:
+                user: user
+                uid: 1000
+            context: ./
+            dockerfile: Dockerfile
+        image: php-7.4-fmp-lewis
+        container_name: taller-app
+        restart: unless-stopped
+        tty: true
+        environment:
+            SERVICE_NAME: app
+            SERVICE_TAGS: dev
+        working_dir: /var/www/
+        volumes:
+            - ./:/var/www
+            - ./docker_compose/php/local.ini:/usr/local/etc/php/conf.d/local.ini
+        networks:
+            - taller
+    nginx:
+        image: nginx:1.21.4-alpine
+        container_name: taller-nginx
+        restart: unless-stopped
+        tty: true
+        ports:
+            - '82:80'
+            - '444:443'
+        volumes:
+            - ./:/var/www
+            - ./docker_compose/nginx:/etc/nginx/conf.d/
+        networks:
+            - taller
+    db:
+        image: postgres:13.4-alpine
+        container_name: taller-db
+        restart: always
+        volumes:
+            - ./docker_compose/db:/var/lib/postgresql/data
+        environment:
+            POSTGRES_PASSWORD: lewisortiz
+            POSTGRES_USER: lewis
+            POSTGRES_DB: tallerlewis
+        ports:
+            - '54321:5432'
+        networks:
+            - taller
+    redis:
+        image: redis:6.2.6-alpine
+        container_name: taller-redis
+        restart: always
+        ports:
+            - '6379:6379'
+        networks:
+            - taller
+
+networks:
+    taller:
+        driver: bridge
+#Volumes
+volumes:
+    dbdata:
+        driver: local
