@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Operator;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -17,6 +18,25 @@ class OperatorRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Operator::class);
+    }
+
+    public function getAllOperators()
+    {
+        $sql = "SELECT O, P, R FROM App\Entity\Operator O JOIN O.person P JOIN P.role R";
+        $query = $this->getEntityManager()->createQuery($sql);
+        return $query->getResult();
+    }
+
+    public function createOperator(array $data, User $user): Operator
+    {
+        $operator = new Operator();
+        $operator->setEmail($data['email']);
+        $operator->setPassword($data['password']);
+        $operator->setPerson($user);
+        $em = $this->getEntityManager();
+        $em->persist($operator);
+        $em->flush();
+        return $operator;
     }
 
     // /**

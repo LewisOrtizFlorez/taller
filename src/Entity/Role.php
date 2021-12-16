@@ -6,6 +6,7 @@ use App\Repository\RoleRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass=RoleRepository::class)
@@ -21,6 +22,7 @@ class Role
 
     /**
      * @ORM\Column(type="string", length=50)
+     * @Groups("operator:read")
      */
     private $name;
 
@@ -36,7 +38,8 @@ class Role
 
     /**
      * @ORM\OneToMany(targetEntity=User::class, mappedBy="role", orphanRemoval=true)
-     */
+     * @Groups("user_role")
+     */    
     private $users;
 
     public function __construct()

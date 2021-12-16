@@ -4,10 +4,12 @@ namespace App\Entity;
 
 use App\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
  * @ORM\Table(name="`user`")
+ * @ORM\HasLifecycleCallbacks()
  */
 class User
 {
@@ -15,43 +17,52 @@ class User
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * @Groups("operator:read")
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups("operator:read")
      */
     private $first_name;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups("operator:read")
      */
     private $last_name;
 
     /**
      * @ORM\Column(type="string", length=15, nullable=true)
+     * @Groups("operator:read")
      */
     private $phone;
 
     /**
      * @ORM\Column(type="boolean")
+     * @Groups("operator:read")
      */
     private $status;
 
     /**
      * @ORM\Column(type="datetime_immutable")
+     * @Groups("operator:read")
      */
     private $created_at;
 
     /**
      * @ORM\Column(type="datetime_immutable")
+     * @Groups("operator:read")
      */
     private $updated_at;
 
     /**
      * @ORM\ManyToOne(targetEntity=Role::class, inversedBy="users")
      * @ORM\JoinColumn(nullable=false)
-     */
+     * @Groups("operator:read")
+     */   
+
     private $role;
 
     /**
@@ -61,9 +72,11 @@ class User
 
     /**
      * @ORM\OneToOne(targetEntity=Patient::class, mappedBy="person", cascade={"persist", "remove"})
+     * @Groups("operator:read")
      */
     private $patient;
 
+ 
     public function getId(): ?int
     {
         return $this->id;
@@ -186,4 +199,24 @@ class User
 
         return $this;
     }
+    
+    /**
+     *@ORM\PrePersist
+     */
+    public function setCreatedAtValue(){
+        $this->created_at = new \DateTimeImmutable();
+    }
+    /**
+     *@ORM\PrePersist
+     */
+    public function setUpdatedAtValue(){
+        $this->updated_at = new \DateTimeImmutable();
+    }
+    /**
+     *@ORM\PrePersist
+     */
+    public function setStatustValue(){
+        $this->status = true;
+    }
+
 }
