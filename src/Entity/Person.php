@@ -2,16 +2,16 @@
 
 namespace App\Entity;
 
-use App\Repository\UserRepository;
+use App\Repository\PersonRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
- * @ORM\Entity(repositoryClass=UserRepository::class)
+ * @ORM\Entity(repositoryClass=PersonRepository::class)
  * @ORM\Table(name="`user`")
  * @ORM\HasLifecycleCallbacks()
  */
-class User
+class Person
 {
     /**
      * @ORM\Id
@@ -58,7 +58,7 @@ class User
     private $updated_at;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Role::class, inversedBy="users")
+     * @ORM\ManyToOne(targetEntity=Role::class, inversedBy="people")
      * @ORM\JoinColumn(nullable=false)
      * @Groups("operator:read")
      */   

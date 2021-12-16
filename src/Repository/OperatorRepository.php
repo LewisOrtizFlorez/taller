@@ -3,7 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Operator;
-use App\Entity\User;
+use App\Entity\Person;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -27,12 +27,12 @@ class OperatorRepository extends ServiceEntityRepository
         return $query->getResult();
     }
 
-    public function createOperator(array $data, User $user): Operator
+    public function createOperator(array $data, Person $person): Operator
     {
         $operator = new Operator();
         $operator->setEmail($data['email']);
         $operator->setPassword($data['password']);
-        $operator->setPerson($user);
+        $operator->setPerson($person);
         $em = $this->getEntityManager();
         $em->persist($operator);
         $em->flush();

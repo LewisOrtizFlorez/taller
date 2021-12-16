@@ -32,7 +32,7 @@ class Operator
     private $password;
 
     /**
-     * @ORM\OneToOne(targetEntity=User::class, inversedBy="operator", cascade={"persist", "remove"})
+     * @ORM\OneToOne(targetEntity=Person::class, inversedBy="operator", cascade={"persist", "remove"})
      * @ORM\JoinColumn(nullable=false)
      * @Groups("operator:read")
      */
@@ -67,12 +67,12 @@ class Operator
         return $this;
     }
 
-    public function getPerson(): ?User
+    public function getPerson(): ?Person
     {
         return $this->person;
     }
 
-    public function setPerson(User $person): self
+    public function setPerson(Person $person): self
     {
         $this->person = $person;
 

@@ -67,12 +67,12 @@ class Patient
         return $this;
     }
 
-    public function getPerson(): ?User
+    public function getPerson(): ?Person
     {
         return $this->person;
     }
 
-    public function setPerson(User $person): self
+    public function setPerson(Person $person): self
     {
         $this->person = $person;
 
