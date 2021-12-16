@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\Patient;
 use App\Entity\PersonContact;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -18,7 +19,19 @@ class PersonContactRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, PersonContact::class);
     }
-
+    public function createPersonContact($data, Patient $patient): PersonContact
+    {
+        $em = $this->getEntityManager();
+        $personContact = new PersonContact();
+        $personContact->setFirstName($data->personContact->firstName);
+        $personContact->setLastName($data->personContact->lastName);
+        $personContact->setPhone($data->personContact->phone);
+        $personContact->setAddress($data->personContact->address);    
+        $personContact->setPatient($patient);
+        $em->persist($personContact);
+        $em->flush();
+        return $personContact;
+    }
     // /**
     //  * @return PersonContact[] Returns an array of PersonContact objects
     //  */

@@ -22,7 +22,7 @@ class OperatorRepository extends ServiceEntityRepository
 
     public function getAllOperators()
     {
-        $sql = "SELECT O, P, R FROM App\Entity\Operator O JOIN O.person P JOIN P.role R";
+        $sql = "SELECT O, P, R FROM App\Entity\Operator O JOIN O.person P JOIN P.role R WHERE P.status = true";
         $query = $this->getEntityManager()->createQuery($sql);
         return $query->getResult();
     }
@@ -39,6 +39,18 @@ class OperatorRepository extends ServiceEntityRepository
         return $operator;
     }
 
+    public function deleteOperator(int $id)
+    {
+        try {
+            $operator = $this->findOneBy(['id' => $id]);
+            $em = $this->getEntityManager();
+            $em->remove($operator);
+            $em->flush(); 
+            return "Operator $id is deleted.";
+        } catch (\Exception $e) {
+            return $e->getMessage();
+        }
+    }
     // /**
     //  * @return Operator[] Returns an array of Operator objects
     //  */

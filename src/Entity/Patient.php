@@ -28,7 +28,7 @@ class Patient
     private $insureNumber;
 
     /**
-     * @ORM\OneToOne(targetEntity=User::class, inversedBy="patient", cascade={"persist", "remove"})
+     * @ORM\OneToOne(targetEntity=Person::class, inversedBy="patient", cascade={"persist", "remove"})
      * @ORM\JoinColumn(nullable=false)
      */
     private $person;
@@ -37,6 +37,11 @@ class Patient
      * @ORM\OneToOne(targetEntity=PersonContact::class, mappedBy="patient", cascade={"persist", "remove"})
      */
     private $personContact;
+
+    /**
+     * @ORM\Column(type="string", length=50, nullable=false)
+     */
+    private $dob;
 
     public function getId(): ?int
     {
@@ -92,6 +97,18 @@ class Patient
         }
 
         $this->personContact = $personContact;
+
+        return $this;
+    }
+
+    public function getDob(): string
+    {
+        return $this->dob;
+    }
+
+    public function setDob(string $dob): self
+    {
+        $this->dob = $dob;
 
         return $this;
     }

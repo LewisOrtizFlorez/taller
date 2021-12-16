@@ -72,7 +72,7 @@ class Person
 
     /**
      * @ORM\OneToOne(targetEntity=Patient::class, mappedBy="person", cascade={"persist", "remove"})
-     * @Groups("operator:read")
+     * @Groups("patient:read")
      */
     private $patient;
 
